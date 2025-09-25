@@ -283,3 +283,76 @@ footer {
   }
 }
 /* End of new styles for the vehicle detail view */
+
+/* Inventory Page Styles */
+/* General styles for the container */
+    #inv-display {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
+        justify-content: center;
+        padding: 20px;
+        background-color: #f0f0f0;
+    }
+
+    /* Styles for individual inventory items */
+    .inventory-item {
+        background-color: #ffffff;
+        border: 1px solid #e0e0e0;
+        border-radius: 12px;
+        overflow: hidden;
+        text-align: center;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .inventory-item:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    .inventory-item img {
+        width: 100%;
+        height: auto;
+        border-bottom: 1px solid #e0e0e0;
+        object-fit: cover;
+    }
+
+    .inventory-item a {
+        text-decoration: none;
+        color: #0066cc;
+        display: block;
+        padding: 10px 15px;
+        font-family: 'Helvetica Neue', Arial, sans-serif;
+    }
+    
+    .inventory-item a:hover {
+      text-decoration: underline;
+    }
+
+    /* Styles for the vehicle name */
+    .inventory-item h2 {
+        font-size: 1.1rem;
+        margin: 10px 0 5px 0;
+        font-weight: bold;
+        color: #333;
+    }
+
+    /* Styles for the vehicle price */
+    .inventory-item span {
+        font-size: 1.25rem;
+        font-weight: bold;
+        color: #28a745;
+        display: block;
+        margin-bottom: 10px;
+    }
+
+    /* Main page heading */
+    h1 {
+        color: #2c3e50;
+        font-family: 'Georgia', serif;
+        text-align: center;
+        margin: 40px 0 20px 0;
+        font-size: 3rem;
+        letter-spacing: 1px;
+    }
