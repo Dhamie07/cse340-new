@@ -1,0 +1,18 @@
+// account-model.js
+
+const pool = require("../database/")
+
+/* *****************************
+*   Register new account
+* *************************** */
+async function registerAccount(account_firstname, account_lastname, account_email, account_password){
+    try {
+        // account_password is now the HASHED password from the controller
+        const sql = "INSERT INTO account (account_firstname, account_lastname, account_email, account_password, account_type) VALUES ($1, $2, $3, $4, 'Client') RETURNING *"
+        return await pool.query(sql, [account_firstname, account_lastname, account_email, account_password])
+    } catch (error) {
+        return error.message // The model returns the error message on failure
+    }
+}
+
+module.exports = { registerAccount }; // Assuming this is the only export or you include all of them

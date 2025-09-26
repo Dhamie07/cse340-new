@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/account.css">
+</head>
+<body>
+    <div class="login-container">
+        <h1><%= title %></h1>
+        <p>All fields are <span class="required">*</span> required.</p>
+        
+        <% if (messages && messages.error) { %>
+            <div class="flash-message"><%= messages.error %></div>
+        <% } %>
+        
+        <form action="/account/register" method="post">
+            <label for="account_firstname">First Name: <span class="required">*</span></label>
+            <input 
+                type="text" 
+                id="account_firstname" 
+                name="account_firstname" 
+                required
+                value="<%= typeof account_firstname !== 'undefined' ? account_firstname : '' %>"
+            >
+
+            <label for="account_lastname">Last Name: <span class="required">*</span></label>
+            <input 
+                type="text" 
+                id="account_lastname" 
+                name="account_lastname" 
+                required
+                value="<%= typeof account_lastname !== 'undefined' ? account_lastname : '' %>"
+            >
+
+            <label for="account_email">Email: <span class="required">*</span></label>
+            <input 
+                type="email" 
+                id="account_email" 
+                name="account_email" 
+                required
+                value="<%= typeof account_email !== 'undefined' ? account_email : '' %>"
+            >
+
+            <label for="account_password">
+                Password: <span class="required">*</span>
+                <span class="password-requirements">
+                    Must be at least 12 characters, include 1 capital letter, 1 number, and 1 special character.
+                </span>
+            </label>
+            <input 
+                type="password" 
+                id="account_password" 
+                name="account_password" 
+                required
+                minlength="12"
+                autocomplete="new-password"
+            >
+            <button type="button" class="toggle-password" onclick="togglePassword()">Show/Hide Password</button>
+
+            <button type="submit">Register</button>
+        </form>
+    </div>
+    <script>
+        function togglePassword() {
+            const pwd = document.getElementById('account_password');
+            pwd.type = pwd.type === 'password' ? 'text' : 'password';
+        }
+    </script>
+</body>
+</html>

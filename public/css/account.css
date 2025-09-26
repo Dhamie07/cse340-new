@@ -1,0 +1,160 @@
+/*
+ * account.css
+ * Styles for the login and registration views
+ */
+
+/* 1. Global Centering (Only for the box within the main layout) */
+body {
+    /* We remove all full-page centering to let the #wrapper from main.css control the flow */
+    margin: 0;
+    padding: 0; 
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4; 
+}
+
+/* 2. Login/Registration Container (The Dark Box) */
+.login-container {
+    width: 380px; 
+    padding: 50px 30px; 
+    background-color: #384e62; /* Darker blue/slate color */
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    color: #ffffff;
+    
+    /* Centering within the main content flow */
+    margin-top: 40px; 
+    margin-bottom: 40px;
+    margin-left: auto;
+    margin-right: auto;
+    
+    max-width: 90%; 
+}
+
+/* 3. Title Styling (Visible for Registration, but stylized) */
+.login-container h1 { 
+    /* 🔑 RENDER H1 for the Registration View, but keep it stylized */
+    display: block; 
+    text-align: center;
+    font-size: 1.8em;
+    margin-bottom: 25px;
+    font-weight: normal;
+}
+
+/* 4. Form Info Text (e.g., "All fields are required") */
+.login-container p {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 0.95em;
+}
+.required {
+    color: #f0f0f0; /* Light color for required indicator */
+    font-weight: bold;
+}
+
+/* 5. Label Styling */
+.login-container label {
+    display: block;
+    margin-bottom: 5px; 
+    font-weight: bold;
+    font-size: 1.1em;
+    color: #ffffff;
+    padding-top: 15px; /* Space above the label to separate fields */
+}
+
+.login-container label:first-of-type {
+    padding-top: 0;
+}
+
+/* 6. Input Fields */
+.login-container form {
+    display: flex;
+    flex-direction: column;
+}
+
+.login-container input[type="text"],
+.login-container input[type="email"], 
+.login-container input[type="password"] {
+    width: 100%; 
+    padding: 12px; 
+    margin-bottom: 15px; 
+    border: none;
+    border-radius: 4px;
+    box-sizing: border-box; 
+    font-size: 1em;
+}
+
+/* 7. Password Requirement Styling (New element in registration.ejs) */
+.password-requirements {
+    display: block;
+    font-weight: normal;
+    font-size: 0.85em;
+    color: #ccc; /* Lighter color for supporting text */
+    margin-top: 5px;
+}
+
+/* 8. Password Toggle Button (New element in registration.ejs) */
+.toggle-password {
+    background-color: transparent;
+    color: #f0f0f0;
+    border: 1px solid #f0f0f0;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9em;
+    margin-top: -10px; /* Pull it up slightly closer to the password field */
+    margin-bottom: 20px; /* Space before the final Register button */
+    align-self: flex-start; /* Aligns the button to the left */
+}
+.toggle-password:hover {
+    background-color: #5a7a92;
+}
+
+/* 9. Submit Button Styling */
+.login-container button[type="submit"] {
+    display: block;
+    width: 150px; /* Made slightly wider for 'Register' */
+    padding: 10px 0;
+    margin: 40px auto 10px auto; /* Increased top margin for separation */
+    
+    background-color: #f0f0f0; 
+    color: #555; 
+    border: 1px solid #ccc;
+    border-radius: 25px; 
+    cursor: pointer;
+    font-size: 1em;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    font-weight: 600;
+}
+
+.login-container button[type="submit"]:hover {
+    background-color: #ffffff;
+}
+
+/* 10. Sign-up Link Styling (Not used in registration, but kept for completeness) */
+.register-link {
+    text-align: center;
+    font-size: 1.1em;
+    padding-top: 10px;
+}
+.register-link a {
+    color: #ffffff;
+    text-decoration: underline;
+    font-weight: bold;
+    margin-left: 5px;
+}
+.register-link a:hover {
+    text-decoration: none;
+}
+
+/* 11. Flash Message Styling */
+.flash-message {
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    background-color: #f8d7da;
+    color: #721c24;
+    text-align: center;
+    border: 1px solid #f5c6cb;
+}
