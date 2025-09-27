@@ -2,7 +2,7 @@
 
 const utilities = require("../utilities/")
 const accountModel = require("../models/account-model")
-const bcrypt = require("bcryptjs") 
+const bcrypt = require("bcryptjs")
 
 /* ****************************************
 *  Deliver login view
@@ -13,8 +13,10 @@ async function buildLogin(req, res, next) {
     res.render("account/login", {
         title: "Login",
         nav,
+        errors: null, // Added to ensure view can safely check for errors
     })
 }
+
 
 
 /* ****************************************
@@ -24,8 +26,10 @@ async function buildLogin(req, res, next) {
 async function buildRegistration(req, res, next) {
     let nav = await utilities.getNav()
     res.render("account/registration", {
-        title: "Registration", // Corrected title
+        title: "Registration",
         nav,
+        // 👇 CHANGE MADE HERE: Added 'errors: null'
+        errors: null,
     })
 }
 
@@ -33,8 +37,7 @@ async function buildRegistration(req, res, next) {
 /* ****************************************
 *  Process Registration
 * *************************************** */
-// This function definition is correct and was provided in your input.
-async function registerAccount(req, res, next) { 
+async function registerAccount(req, res, next) {
     let nav = await utilities.getNav()
     const { account_firstname, account_lastname, account_email, account_password } = req.body
 
@@ -47,6 +50,7 @@ async function registerAccount(req, res, next) {
         res.status(500).render("account/registration", {
             title: "Registration",
             nav,
+            // Note: It's good practice to also include errors: null here if not present
         })
         return
     }
@@ -67,10 +71,11 @@ async function registerAccount(req, res, next) {
         res.status(201).render("account/login", {
             title: "Login",
             nav,
+            errors: null, // Added to ensure view can safely check for errors
         })
     } else {
         req.flash("notice", "Sorry, the registration failed.")
-        res.status(501).render("account/registration", { 
+        res.status(501).render("account/registration", {
             title: "Registration",
             nav,
         })

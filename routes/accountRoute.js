@@ -1,5 +1,5 @@
 // accountRoute.js
-
+const regValidate = require('../utilities/account-validation');
 const express = require('express');
 const utilities = require('../utilities');
 const accountController = require('../controllers/accountController');
@@ -16,7 +16,12 @@ router.get('/registration', utilities.handleErrors(accountController.buildRegist
 router.get('/', utilities.handleErrors(accountController.buildAccount));
 
 // Export the router
-// POST route for account registration ✨ NEW ROUTE HERE ✨
-router.post('/register', utilities.handleErrors(accountController.registerAccount));
+// Process the registration data
+router.post(
+  "/register",
+  regValidate.registationRules(),
+  regValidate.checkRegData,
+  utilities.handleErrors(accountController.registerAccount)
+)
 
 module.exports = router;

@@ -14,7 +14,13 @@
         <% if (messages && messages.error) { %>
             <div class="flash-message"><%= messages.error %></div>
         <% } %>
-        
+        <% if (errors) {
+            <ul class="notice">
+                <% errors.array().forEach(error => { %>
+                    <li><%= error.msg %></li>
+                <% }) %>
+            </ul>
+        } %>
         <form action="/account/register" method="post">
             <label for="account_firstname">First Name: <span class="required">*</span></label>
             <input 
