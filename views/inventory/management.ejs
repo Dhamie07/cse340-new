@@ -8,32 +8,25 @@
     <link rel="stylesheet" href="/css/inventory.css">
 </head>
 <body>
-    <%- include('../includes/header') %>
-    <%- nav %>
-    
     <main>
         <div class="content-container management-view">
             <h1><%= title %></h1>
             
-            <%# Display flash messages (assuming messages() is available globally) %>
+            <%# Display flash messages %>
             <%- messages() %>
 
             <p>Welcome to the Inventory Management area. Please select an option to continue:</p>
             
             <div class="management-options">
-                <%# Link to the Add New Classification process %>
                 <a href="/inv/add-classification" class="management-link" title="Go to Add New Classification View">
                     Add New Classification
                 </a>
                 
-                <%# Link to the Add New Inventory process %>
                 <a href="/inv/add-inventory" class="management-link" title="Go to Add New Inventory View">
                     Add New Inventory
                 </a>
             </div>
         </div>
-    </main>
-
-    <%- include('../includes/footer') %>
+    </main>>
 </body>
 </html>

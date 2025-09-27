@@ -8,17 +8,14 @@
     <link rel="stylesheet" href="/css/inventory.css">
 </head>
 <body>
-    <%- include('../includes/header') %>
-    <%- nav %>
-    
     <main>
         <div class="content-container form-container">
             <h1><%= title %></h1>
 
-            <%# Display flash messages and server errors %>
+            <%# Display flash messages %>
             <%- messages() %>
 
-            <% if (errors) { %>
+            <% if (errors && errors.array) { %>
                 <ul class="notice">
                     <% errors.array().forEach(error => { %>
                         <li><%= error.msg %></li>
@@ -35,16 +32,14 @@
                     id="classificationName" 
                     name="classification_name" 
                     required 
-                    title="Name must not contain spaces or special characters."
+                    title="Name must not contain spaces or special characters. Only letters and numbers are allowed."
                     pattern="^[a-zA-Z0-9]+$" 
-                    value="<%= locals.classification_name %>"
+                    value="<%= locals.classification_name || '' %>"
                 >
 
                 <button type="submit" class="submit-button">Add Classification</button>
             </form>
         </div>
     </main>
-
-    <%- include('../includes/footer') %>
 </body>
 </html>
