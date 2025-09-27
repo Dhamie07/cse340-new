@@ -7,28 +7,24 @@ const bcrypt = require("bcryptjs")
 /* ****************************************
 *  Deliver login view
 * *************************************** */
-// 🔑 MISSING CODE: Add the function declaration for buildLogin
 async function buildLogin(req, res, next) {
     let nav = await utilities.getNav()
     res.render("account/login", {
         title: "Login",
         nav,
-        errors: null, // Added to ensure view can safely check for errors
+        errors: null,
     })
 }
-
 
 
 /* ****************************************
 *  Deliver registration view
 * *************************************** */
-// 🔑 MISSING CODE: Add the function declaration for buildRegistration
 async function buildRegistration(req, res, next) {
     let nav = await utilities.getNav()
     res.render("account/registration", {
         title: "Registration",
         nav,
-        // 👇 CHANGE MADE HERE: Added 'errors: null'
         errors: null,
     })
 }
@@ -44,13 +40,18 @@ async function registerAccount(req, res, next) {
     // Hash the password before storing
     let hashedPassword
     try {
+        // User's superior asynchronous hashing function (No change needed here)
         hashedPassword = await bcrypt.hash(account_password, 10)
     } catch (error) {
-        req.flash("notice", 'Sorry, there was a processing error.')
+        // IMPROVEMENT HERE: Ensuring form data is passed back to keep fields sticky on a hashing error
+        req.flash("notice", 'Sorry, there was a processing error during registration.')
         res.status(500).render("account/registration", {
             title: "Registration",
             nav,
-            // Note: It's good practice to also include errors: null here if not present
+            account_firstname,
+            account_lastname,
+            account_email,
+            errors: null,
         })
         return
     }
@@ -60,7 +61,7 @@ async function registerAccount(req, res, next) {
         account_firstname,
         account_lastname,
         account_email,
-        hashedPassword
+        hashedPassword // Correctly passes the hashed password
     )
 
     if (regResult) {
@@ -71,7 +72,7 @@ async function registerAccount(req, res, next) {
         res.status(201).render("account/login", {
             title: "Login",
             nav,
-            errors: null, // Added to ensure view can safely check for errors
+            errors: null,
         })
     } else {
         req.flash("notice", "Sorry, the registration failed.")

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %> | CSE Motors</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/inventory.css">
+</head>
+<body>
+    <%- include('../includes/header') %>
+    <%- nav %>
+    
+    <main>
+        <div class="content-container management-view">
+            <h1><%= title %></h1>
+            
+            <%# Display flash messages (assuming messages() is available globally) %>
+            <%- messages() %>
+
+            <p>Welcome to the Inventory Management area. Please select an option to continue:</p>
+            
+            <div class="management-options">
+                <%# Link to the Add New Classification process %>
+                <a href="/inv/add-classification" class="management-link" title="Go to Add New Classification View">
+                    Add New Classification
+                </a>
+                
+                <%# Link to the Add New Inventory process %>
+                <a href="/inv/add-inventory" class="management-link" title="Go to Add New Inventory View">
+                    Add New Inventory
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <%- include('../includes/footer') %>
+</body>
+</html>

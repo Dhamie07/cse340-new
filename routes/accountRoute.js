@@ -24,4 +24,14 @@ router.post(
   utilities.handleErrors(accountController.registerAccount)
 )
 
+// Process the login attempt
+router.post(
+  "/login",
+  regValidate.loginRules(), // Runs validation rules for email and password
+  regValidate.checkLoginData, // Checks validation results and renders the view with errors if they exist
+  (req, res) => {
+    // This message will only show if validation passed
+    res.status(200).send('login process reached') 
+  }
+)
 module.exports = router;

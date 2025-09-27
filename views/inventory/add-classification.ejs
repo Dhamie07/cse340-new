@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %> | CSE Motors</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/inventory.css">
+</head>
+<body>
+    <%- include('../includes/header') %>
+    <%- nav %>
+    
+    <main>
+        <div class="content-container form-container">
+            <h1><%= title %></h1>
+
+            <%# Display flash messages and server errors %>
+            <%- messages() %>
+
+            <% if (errors) { %>
+                <ul class="notice">
+                    <% errors.array().forEach(error => { %>
+                        <li><%= error.msg %></li>
+                    <% }) %>
+                </ul>
+            <% } %>
+
+            <p>New classification names must not contain spaces or special characters.</p>
+
+            <form action="/inv/add-classification" method="post" id="addClassificationForm">
+                <label for="classificationName">Classification Name</label>
+                <input 
+                    type="text" 
+                    id="classificationName" 
+                    name="classification_name" 
+                    required 
+                    title="Name must not contain spaces or special characters."
+                    pattern="^[a-zA-Z0-9]+$" 
+                    value="<%= locals.classification_name %>"
+                >
+
+                <button type="submit" class="submit-button">Add Classification</button>
+            </form>
+        </div>
+    </main>
+
+    <%- include('../includes/footer') %>
+</body>
+</html>
