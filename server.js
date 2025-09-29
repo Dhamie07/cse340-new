@@ -5,6 +5,7 @@
 /* ***********************
  * Require Statements
  *************************/
+const cookieParser = require("cookie-parser")
 const session = require("express-session")
 const pool = require('./database/')
 const baseController = require("./controllers/baseController")
@@ -32,7 +33,8 @@ const bodyParser = require("body-parser")
 }))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
-
+app.use(cookieParser())
+app.use(utilities.checkJWTToken)
 // Express Messages Middleware
 app.use(require('connect-flash')())
 app.use(function(req, res, next){

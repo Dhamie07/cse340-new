@@ -13,7 +13,7 @@ router.get('/login', utilities.handleErrors(accountController.buildLogin));
 router.get('/registration', utilities.handleErrors(accountController.buildRegistration)); 
 
 // GET route for "My Account" page (existing)
-router.get('/', utilities.handleErrors(accountController.buildAccount));
+router.get('/', utilities.checkLogin, utilities.handleErrors(accountController.buildAccountManagement));
 
 // Export the router
 // Process the registration data
@@ -29,9 +29,6 @@ router.post(
   "/login",
   regValidate.loginRules(), // Runs validation rules for email and password
   regValidate.checkLoginData, // Checks validation results and renders the view with errors if they exist
-  (req, res) => {
-    // This message will only show if validation passed
-    res.status(200).send('login process reached') 
-  }
+  utilities.handleErrors(accountController.accountLogin) // If no errors, proceed to login
 )
 module.exports = router;

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+       
+    <meta charset="UTF-8" />
+       
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+       
+    <title><%= title %> | CSE Motors</title>
+       
+    <link rel="stylesheet" href="/css/styles.css" />
+       
+    <link rel="stylesheet" href="/css/inventory.css" />
+  </head>
+  <body>
+       
+    <main>
+             
+      <div class="content-container form-container">
+                   
+        <h1><%= title %></h1>
+        <p>Use the form below to modify the vehicle inventory data.</p>
+
+                    <%# Display flash messages %>             <%- messages() %>
+                    <% if (errors && errors.array) { %>                
+        <ul class="notice">
+                              <% errors.array().forEach(error => { %>          
+                       
+          <li><%= error.msg %></li>
+                              <% }) %>                
+        </ul>
+                    <% } %>            
+        <p class="required-note">Fields marked with * are required.</p>
+
+                    <%# Changed action to /inv/update and method to POST %>    
+               
+        <form action="/inv/update" method="post" id="updateForm">
+                                         
+          <label for="classificationList">Classification *</label>              
+            <%# classificationSelect includes the logic to mark the correct
+          option as selected %>                 <%- classificationSelect %>    
+                      <label for="invMake">Make *</label>                
+          <input
+            type="text"
+            id="invMake"
+            name="inv_make"
+            required
+            minlength="3"
+            value="<%= inv_make %>"
+          />
+
+                          <label for="invModel">Model *</label>                
+          <input
+            type="text"
+            id="invModel"
+            name="inv_model"
+            required
+            minlength="3"
+            value="<%= inv_model %>"
+          />
+
+                          <label for="invYear">Year (YYYY) *</label>            
+             
+          <input
+            type="number"
+            id="invYear"
+            name="inv_year"
+            required
+            min="1900"
+            max="9999"
+            value="<%= inv_year %>"
+          />
+
+                          <label for="invDescription">Description *</label>    
+                     
+          <textarea id="invDescription" name="inv_description" required>
+<%= inv_description %></textarea
+          >
+
+                         
+          <label for="invImage"
+            >Image Path (e.g., /images/vehicles/no-image.png) *</label
+          >
+                         
+          <input
+            type="text"
+            id="invImage"
+            name="inv_image"
+            required
+            value="<%= inv_image %>"
+          />
+
+                         
+          <label for="invThumbnail"
+            >Thumbnail Path (e.g., /images/vehicles/no-image-tn.png) *</label
+          >
+                         
+          <input
+            type="text"
+            id="invThumbnail"
+            name="inv_thumbnail"
+            required
+            value="<%= inv_thumbnail %>"
+          />
+
+                          <label for="invPrice">Price ($) *</label>            
+             
+          <input
+            type="number"
+            id="invPrice"
+            name="inv_price"
+            required
+            step="0.01"
+            min="0"
+            value="<%= inv_price %>"
+          />
+
+                          <label for="invMiles">Mileage *</label>              
+           
+          <input
+            type="number"
+            id="invMiles"
+            name="inv_miles"
+            required
+            min="0"
+            value="<%= inv_miles %>"
+          />
+
+                          <label for="invColor">Color *</label>                
+          <input
+            type="text"
+            id="invColor"
+            name="inv_color"
+            required
+            pattern="[A-Za-z]+"
+            title="Color must contain only letters."
+            value="<%= inv_color %>"
+          />
+
+          <%# Hidden input for inventory ID, required for the update POST
+          request %>
+          <input type="hidden" name="inv_id" value="<%= inv_id %>" />
+
+                         
+          <button type="submit" class="submit-button" disabled>Update Vehicle</button>  
+          <input type="hidden" name="inv_id"<% if(locals.inv_id) { %> value="<%= locals.inv_id %>"<% } %>>      
+        </form>
+               
+      </div>
+         
+    </main>
+    <script src="/js/inventory.js"></script>
+  </body>
+</html>
+

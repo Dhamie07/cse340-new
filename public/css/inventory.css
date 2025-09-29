@@ -133,3 +133,58 @@
         min-width: 90%;
     }
 }
+
+
+/* ----------------------------------
+   --- NEW Styles for Manage Inventory Section ---
+   ---------------------------------- */
+
+/* 1. Style the <h2> to look like the main <h1> */
+.management-view .main-heading-style {
+    /* These styles make the <h2> prominent, centered, and visually distinct */
+    font-size: 2.2em; /* Use a large size, slightly smaller than the main page H1 if needed */
+    font-weight: 700; /* Ensure it's bold */
+    text-align: center;
+    margin-top: 35px; /* Add separation from the buttons above */
+    margin-bottom: 20px; /* Add separation from the paragraph below */
+    color: #333; /* Keep it dark like the primary title */
+}
+
+/* 2. Styles for the dynamic Inventory Table */
+#inventoryDisplay {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+#inventoryDisplay th, 
+#inventoryDisplay td {
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+#inventoryDisplay thead tr {
+    background-color: #f0f0f0;
+    font-weight: bold;
+    color: #333;
+}
+
+#inventoryDisplay tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+#inventoryDisplay tbody tr:hover {
+    background-color: #e0f7fa;
+}
+
+/* 3. Styles for Edit/Delete Links inside the table */
+#inventoryDisplay a {
+    color: #007bff; /* Match the submit button color */
+    text-decoration: none;
+    font-weight: 600;
+}
+
+#inventoryDisplay a:hover {
+    text-decoration: underline;
+}

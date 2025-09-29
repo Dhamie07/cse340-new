@@ -245,3 +245,12 @@ WHERE inv_make = 'GM' AND inv_model = 'Hummer';
 UPDATE inventory
 SET inv_image = REPLACE(inv_image, '/images/', '/images/vehicles/'),
     inv_thumbnail = REPLACE(inv_thumbnail, '/images/', '/images/vehicles/');
+
+-- Change the account type of the user with the email '
+UPDATE public.account
+SET account_type = 'Employee'
+WHERE account_email = 'happy@340.edu';
+
+UPDATE public.account
+SET account_type = 'Admin'
+WHERE account_email = 'manager@340.edu';

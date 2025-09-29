@@ -1,11 +1,13 @@
-// accountController.js
-
+// Import necessary modules
+const jwt = require("jsonwebtoken")
+require("dotenv").config()
+// Importing utilities and models
 const utilities = require("../utilities/")
 const accountModel = require("../models/account-model")
 const bcrypt = require("bcryptjs")
 
 /* ****************************************
-*  Deliver login view
+* Deliver login view
 * *************************************** */
 async function buildLogin(req, res, next) {
     let nav = await utilities.getNav()
@@ -18,7 +20,7 @@ async function buildLogin(req, res, next) {
 
 
 /* ****************************************
-*  Deliver registration view
+* Deliver registration view
 * *************************************** */
 async function buildRegistration(req, res, next) {
     let nav = await utilities.getNav()
@@ -31,7 +33,7 @@ async function buildRegistration(req, res, next) {
 
 
 /* ****************************************
-*  Process Registration
+* Process Registration
 * *************************************** */
 async function registerAccount(req, res, next) {
     let nav = await utilities.getNav()
@@ -67,13 +69,11 @@ async function registerAccount(req, res, next) {
     if (regResult) {
         req.flash(
             "notice",
+            // The flash message will now be displayed when the user is redirected to /account/login
             `Congratulations, you\'re registered ${account_firstname}. Please log in.`
         )
-        res.status(201).render("account/login", {
-            title: "Login",
-            nav,
-            errors: null,
-        })
+        // FIX: Changed res.render() to res.redirect() to trigger the PRG pattern
+        res.status(201).redirect("/account/login") 
     } else {
         req.flash("notice", "Sorry, the registration failed.")
         res.status(501).render("account/registration", {
@@ -83,5 +83,63 @@ async function registerAccount(req, res, next) {
     }
 }
 
+/* ****************************************
+* Process login request
+* ************************************ */
+async function accountLogin(req, res) {
+    let nav = await utilities.getNav()
+    const { account_email, account_password } = req.body
+    const accountData = await accountModel.getAccountByEmail(account_email)
+    if (!accountData) {
+        req.flash("notice", "Please check your credentials and try again.")
+        res.status(400).render("account/login", {
+            title: "Login",
+            nav,
+            errors: null,
+            account_email,
+        })
+        return
+    }
+    try {
+        if (await bcrypt.compare(account_password, accountData.account_password)) {
+            delete accountData.account_password
+            const accessToken = jwt.sign(accountData, process.env.ACCESS_TOKEN_SECRET, { expiresIn: 3600 * 1000 })
+            if(process.env.NODE_ENV === 'development') {
+                res.cookie("jwt", accessToken, { httpOnly: true, maxAge: 3600 * 1000 })
+            } else {
+                res.cookie("jwt", accessToken, { httpOnly: true, secure: true, maxAge: 3600 * 1000 })
+            }
+            // Successful login redirects to the account management route
+            return res.redirect("/account/")
+        }
+        else {
+            req.flash("message notice", "Please check your credentials and try again.")
+            res.status(400).render("account/login", {
+                title: "Login",
+                nav,
+                errors: null,
+                account_email,
+            })
+        }
+    } catch (error) {
+        throw new Error('Access Forbidden')
+    }
+}
+
+/* ****************************************
+* Deliver account management view
+* This is the new function to deliver the post-login landing page.
+* *************************************** */
+async function buildAccountManagement(req, res, next) {
+    let nav = await utilities.getNav()
+    const pageTitle = "Account Management"
+    res.render("account/account-management", {
+        title: pageTitle,
+        nav,
+        errors: null, // Pass null for no express-validator errors
+    })
+}
+
+
 // All functions are now correctly defined and exported.
-module.exports = { buildLogin, buildRegistration, registerAccount }
+module.exports = { buildLogin, buildRegistration, registerAccount, accountLogin, buildAccountManagement }

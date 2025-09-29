@@ -1,32 +1,83 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= title %> | CSE Motors</title>
-    <link rel="stylesheet" href="/css/styles.css">
-    <link rel="stylesheet" href="/css/inventory.css">
-</head>
-<body>
-    <main>
-        <div class="content-container management-view">
-            <h1><%= title %></h1>
-            
-            <%# Display flash messages %>
-            <%- messages() %>
 
-            <p>Welcome to the Inventory Management area. Please select an option to continue:</p>
-            
-            <div class="management-options">
-                <a href="/inv/add-classification" class="management-link" title="Go to Add New Classification View">
-                    Add New Classification
-                </a>
-                
-                <a href="/inv/add-inventory" class="management-link" title="Go to Add New Inventory View">
-                    Add New Inventory
-                </a>
-            </div>
+<html lang="en">
+  <head>
+       
+    <meta charset="UTF-8" />
+       
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+       
+    <title><%= title %> | CSE Motors</title>
+       
+    <link rel="stylesheet" href="/css/styles.css" />
+       
+    <link rel="stylesheet" href="/css/inventory.css" />
+  </head>
+  <body>
+       
+    <main>
+             
+      <div class="content-container management-view">
+                   
+        <h1><%= title %></h1>
+        <%# Display flash messages %>             
+        <%-messages() %>            
+        <!-- Links to add classification/inventory -->
+                   
+        <div class="management-options">
+                         
+          <a
+            href="/inv/add-classification"
+            class="management-link"
+            title="Go to Add New Classification View"
+          >
+                                Add New Classification                
+          </a>
+                                         
+          <a
+            href="/inv/add-inventory"
+            class="management-link"
+            title="Go to Add New Inventory View"
+          >
+                                Add New Inventory                
+          </a>
+                     
         </div>
-    </main>>
-</body>
+
+                   
+        <!-- New Management Section -->
+                   
+        <h2>Manage Inventory</h2>
+                   
+        <p>
+          Select a classification from the list to see the items belonging to
+          the classification.
+        </p>
+
+                   
+        <!-- Classification Select List -->
+                   
+        <div class="classification-select-container">
+                          <%- classificationSelect %>            
+        </div>
+
+                   
+        <!-- Table Hook for Inventory Display -->
+                   
+        <table id="inventoryDisplay"></table>
+
+                   
+        <!-- Noscript Fallback -->
+                   
+        <noscript>JavaScript must be enabled to use this page.</noscript>
+
+               
+      </div>
+         
+    </main>
+       
+    <!-- Link the new JavaScript file for interactivity -->
+       
+    <script src="/js/inventory.js"></script>
+  </body>
 </html>

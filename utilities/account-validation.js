@@ -32,10 +32,10 @@ validate.registationRules = () => {
             .normalizeEmail() // refer to validator.js docs
             .withMessage("A valid email is required.")
             .custom(async (account_email) => {
-              const emailExists = await accountModel.checkExistingEmail(account_email)
-              if (emailExists){
-                throw new Error("Email exists. Please log in or use different email")
-              }
+                const emailExists = await accountModel.checkExistingEmail(account_email)
+                if (emailExists){
+                    throw new Error("Email exists. Please log in or use different email")
+                }
             }),
 
         // password is required and must be strong password
@@ -62,7 +62,8 @@ validate.checkRegData = async (req, res, next) => {
     errors = validationResult(req)
     if (!errors.isEmpty()) {
       let nav = await utilities.getNav()
-      res.render("account/register", {
+      // CORRECTED VIEW NAME: 'account/register' changed to 'account/registration'
+      res.render("account/registration", {
         errors,
         title: "Registration",
         nav,
@@ -79,20 +80,20 @@ validate.checkRegData = async (req, res, next) => {
  * Login Data Validation Rules
  * *************************************** */
 validate.loginRules = () => {
-  return [
-    // Valid email is required
-    body("account_email")
-      .trim()
-      .isEmail()
-      .normalizeEmail() // refer to validator.js docs
-      .withMessage("A valid email is required."),
+    return [
+        // Valid email is required
+        body("account_email")
+            .trim()
+            .isEmail()
+            .normalizeEmail() // refer to validator.js docs
+            .withMessage("A valid email is required."),
 
-    // Password is required
-    body("account_password")
-      .trim()
-      .notEmpty()
-      .withMessage("Password is required."), 
-  ]
+        // Password is required
+        body("account_password")
+            .trim()
+            .notEmpty()
+            .withMessage("Password is required."), 
+    ]
 }
 
 /* ****************************************
