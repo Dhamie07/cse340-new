@@ -1,19 +1,21 @@
 /*
  * account.css
- * Styles for the login and registration views
+ * Styles for the login and registration views, and account management/update
  */
 
 /* 1. Global Centering (Only for the box within the main layout) */
 body {
     /* We remove all full-page centering to let the #wrapper from main.css control the flow */
     margin: 0;
-    padding: 0; 
+    padding: 0;
     font-family: Arial, sans-serif;
-    background-color: #f4f4f4; 
+    background-color: #f4f4f4;
 }
 
-/* 2. Login/Registration Container (The Dark Box) */
-.login-container {
+/* =========================================================
+    2. Account View Container (Used by all Account views)
+    ========================================================= */
+.account-form-container { /* Replaces .login-container */
     width: 380px; 
     padding: 50px 30px; 
     background-color: #384e62; /* Darker blue/slate color */
@@ -30,9 +32,8 @@ body {
     max-width: 90%; 
 }
 
-/* 3. Title Styling (Visible for Registration, but stylized) */
-.login-container h1 { 
-    /* 🔑 RENDER H1 for the Registration View, but keep it stylized */
+/* General Styling for Headings within the container */
+.account-form-container .page-heading { 
     display: block; 
     text-align: center;
     font-size: 1.8em;
@@ -40,8 +41,8 @@ body {
     font-weight: normal;
 }
 
-/* 4. Form Info Text (e.g., "All fields are required") */
-.login-container p {
+/* 3. Form Info Text (e.g., "All fields are required") */
+.account-form-container p {
     text-align: center;
     margin-bottom: 20px;
     font-size: 0.95em;
@@ -51,8 +52,8 @@ body {
     font-weight: bold;
 }
 
-/* 5. Label Styling */
-.login-container label {
+/* 4. Label Styling */
+.account-form-container label {
     display: block;
     margin-bottom: 5px; 
     font-weight: bold;
@@ -61,19 +62,19 @@ body {
     padding-top: 15px; /* Space above the label to separate fields */
 }
 
-.login-container label:first-of-type {
+.account-form-container label:first-of-type {
     padding-top: 0;
 }
 
-/* 6. Input Fields */
-.login-container form {
+/* 5. Input Fields */
+.account-form-container form {
     display: flex;
     flex-direction: column;
 }
 
-.login-container input[type="text"],
-.login-container input[type="email"], 
-.login-container input[type="password"] {
+.account-form-container input[type="text"],
+.account-form-container input[type="email"], 
+.account-form-container input[type="password"] {
     width: 100%; 
     padding: 12px; 
     margin-bottom: 15px; 
@@ -83,7 +84,7 @@ body {
     font-size: 1em;
 }
 
-/* 7. Password Requirement Styling (New element in registration.ejs) */
+/* 6. Password Requirement Styling */
 .password-requirements {
     display: block;
     font-weight: normal;
@@ -92,7 +93,7 @@ body {
     margin-top: 5px;
 }
 
-/* 8. Password Toggle Button (New element in registration.ejs) */
+/* 7. Password Toggle Button */
 .toggle-password {
     background-color: transparent;
     color: #f0f0f0;
@@ -101,20 +102,20 @@ body {
     border-radius: 4px;
     cursor: pointer;
     font-size: 0.9em;
-    margin-top: -10px; /* Pull it up slightly closer to the password field */
-    margin-bottom: 20px; /* Space before the final Register button */
-    align-self: flex-start; /* Aligns the button to the left */
+    margin-top: -10px; 
+    margin-bottom: 20px; 
+    align-self: flex-start; 
 }
 .toggle-password:hover {
     background-color: #5a7a92;
 }
 
-/* 9. Submit Button Styling */
-.login-container button[type="submit"] {
+/* 8. Generic Button / Submit Styling */
+.button {
     display: block;
-    width: 150px; /* Made slightly wider for 'Register' */
+    width: 150px; 
     padding: 10px 0;
-    margin: 40px auto 10px auto; /* Increased top margin for separation */
+    margin: 40px auto 10px auto; 
     
     background-color: #f0f0f0; 
     color: #555; 
@@ -126,35 +127,104 @@ body {
     letter-spacing: 1px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     font-weight: 600;
+    text-align: center; /* Important for <a> tags using the button class */
+    text-decoration: none; /* Remove underline for anchor buttons */
+    transition: background-color 0.2s;
 }
 
-.login-container button[type="submit"]:hover {
+.button:hover {
     background-color: #ffffff;
 }
 
-/* 10. Sign-up Link Styling (Not used in registration, but kept for completeness) */
-.register-link {
-    text-align: center;
-    font-size: 1.1em;
-    padding-top: 10px;
-}
-.register-link a {
-    color: #ffffff;
-    text-decoration: underline;
-    font-weight: bold;
-    margin-left: 5px;
-}
-.register-link a:hover {
-    text-decoration: none;
-}
-
-/* 11. Flash Message Styling */
-.flash-message {
-    padding: 10px;
+/* 9. Flash Message Styling */
+.notice {
+    list-style-type: none; /* Remove bullets */
+    padding: 10px 20px;
     margin-bottom: 20px;
     border-radius: 4px;
+    text-align: center;
+}
+.error-notice {
     background-color: #f8d7da;
     color: #721c24;
-    text-align: center;
     border: 1px solid #f5c6cb;
+}
+.success-notice {
+    background-color: #d1e7dd;
+    color: #0f5132;
+    border: 1px solid #a3cfb4;
+}
+
+/* =========================================================
+    10. Account Management View Specific Styles 
+    (The .account-summary-card is the white inner box)
+    ========================================================= */
+
+.account-form-container.account-management-view {
+    max-width: 600px; /* Wider container for management page */
+    background-color: #ffffff; /* Make the main container white */
+    padding: 30px; /* Reduced padding since it's the main surface */
+    color: #333; /* Darker text for white background */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.account-management-view .page-heading {
+    color: #384e62; /* Keep title color consistent */
+    margin-bottom: 30px;
+}
+
+.account-management-view .form-card { 
+    /* The management page only has one "card" inside, so we use the container itself */
+    padding: 0; 
+    box-shadow: none; 
+}
+
+.account-summary-card .welcome-heading {
+    font-size: 1.5em;
+    color: #555;
+    margin-bottom: 20px;
+}
+
+/* Update Link Wrapper & Button */
+.update-link-wrapper {
+    margin: 30px 0;
+    padding: 0;
+}
+
+.update-link-wrapper .button {
+    /* Adjust button style for the account management view */
+    width: 250px; 
+    padding: 12px 0;
+    margin: 0 auto;
+    background-color: #384e62; /* Primary color */
+    color: #ffffff;
+}
+
+.update-link-wrapper .button:hover {
+    background-color: #5a7a92;
+    color: #ffffff;
+}
+
+.section-divider {
+    border: 0;
+    border-top: 1px solid #e5e7eb;
+    margin: 30px 0;
+}
+
+.management-heading {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #384e62;
+    margin-bottom: 10px;
+}
+
+.management-link-wrapper a.management-link {
+    color: #007bff;
+    text-decoration: underline;
+    font-weight: normal;
+}
+
+.management-link-wrapper a.management-link:hover {
+    color: #0056b3;
+    text-decoration: none;
 }

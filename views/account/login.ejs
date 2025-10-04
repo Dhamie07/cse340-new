@@ -1,49 +1,53 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title><%= title %></title>
-    <link rel="stylesheet" href="/css/styles.css">
-    <link rel="stylesheet" href="/css/account.css">
+<div class="account-form-container"> 
+    <h1 class="page-heading"><%= title %></h1>
 
-</head>
-<body>
-    <div class="login-container">
-        <h1><%= title %></h1>
+    <!-- DISPLAY FLASH MESSAGES -->
+    <% 
+        let allMessages = [];
+        if (typeof messages === 'object' && messages !== null) {
+            Object.keys(messages).forEach(key => {
+                if (Array.isArray(messages[key])) {
+                    allMessages = allMessages.concat(messages[key]);
+                }
+            });
+        }
+    %>
 
-        <!-- DISPLAY FLASH MESSAGES -->
-        <% if (messages && messages.error) { %>
-            <div class="flash-message"><%= messages.error %></div>
-        <% } %>
+    <!-- Display Flash Messages (Using success-notice for general messages) -->
+    <% if (allMessages.length > 0) { %>
+        <ul class="notice success-notice" role="alert">
+            <% allMessages.forEach(message => { %>
+                <li><%= message %></li>
+            <% }); %>
+        </ul>
+    <% } %>
 
-        <!-- DISPLAY SERVER-SIDE VALIDATION ERRORS -->
-        <% if (errors) { %>
-            <ul class="notice">
-                <% errors.array().forEach(error => { %>
-                    <li><%= error.msg %></li>
-                <% }) %>
-            </ul>
-        <% } %>
+    <!-- DISPLAY SERVER-SIDE VALIDATION ERRORS -->
+    <% if (errors) { %>
+        <ul class="notice error-notice">
+            <% errors.array().forEach(error => { %>
+                <li><%= error.msg %></li>
+            <% }) %>
+        </ul>
+    <% } %>
 
-        <form id="loginForm" action="/account/login" method="POST">
-            <label for="account_email">Email:</label>
-            <input 
-                type="email" 
-                id="account_email" 
-                name="account_email" 
-                required
-                value="<%= locals.account_email %>"
-            >
+    <form id="loginForm" action="/account/login" method="POST">
+        <label for="account_email">Email:</label>
+        <input 
+            type="email" 
+            id="account_email" 
+            name="account_email" 
+            required
+            value="<%= typeof locals.account_email !== 'undefined' ? locals.account_email : '' %>"
+        >
 
-            <label for="account_password">Password:</label>
-            <input type="password" id="account_password" name="account_password" required>
+        <label for="account_password">Password:</label>
+        <input type="password" id="account_password" name="account_password" required>
 
-            <button type="submit">LOGIN</button>
-        </form>
+        <button type="submit" class="button" style="width: 100%;">Login</button>
+    </form>
 
-        <div class="register-link">
-            No account? <a href="/account/registration">Sign-up</a>
-        </div>
-    </div>
-</body>
-</html>
+    <div class="register-link" style="text-align: center; margin-top: 20px;">
+        No account? <a href="/account/registration" style="color: #ccc; text-decoration: underline;">Sign-up</a>
+    </div>
+</div>

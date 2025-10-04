@@ -32,7 +32,8 @@ body {
 }
 
 /* Header */
-#top-header {
+/* Assuming the main container around the logo/account is the top white bar */
+#header {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -40,33 +41,80 @@ body {
     border-bottom: 1px solid #ccc;
 }
 
-#top-header a {
+/* Base link color (reverted to black for visibility on white background) */
+#header a {
     text-decoration: none;
     color: #000;
 }
 
 /* Specific styling for the CSE Motors logo */
-#top-header .logo {
-    font-size: 2em; /* Made bigger */
+#header #logo-link img {
+    /* Adjust these styles as needed for your logo image */
+    max-height: 50px; 
+    width: auto;
+}
+
+/* * *** START FIX: Styling the Logged-in Utility Links *** */
+
+/* Style the container for alignment and positioning */
+#top-nav {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Space between Welcome and Logout */
+    /* Ensure the utility links are always positioned correctly in the header */
+    margin-left: auto;
+}
+
+/* The parent of "My Account" / "Logout" */
+#account-links {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+/* FIX: Ensure the welcome text and logout link are black for high contrast against the white background */
+#welcome-link {
+    color: #000; /* Black text on white background */
+    font-weight: normal;
+    padding: 5px 0; /* Add padding for visual balance */
+    text-decoration: none;
+}
+
+/* Style the Logout link specifically */
+#logout-link,
+#my-account-link {
+    color: #007bff; /* Blue for a clickable link */
     font-weight: bold;
-    font-family: 'Times New Roman', Times, serif; /* Different font */
-}
-
-/* Specific styling for the My Account link */
-#top-header #account a {
-    font-size: 1em;
     text-transform: uppercase;
-    font-family: Arial, sans-serif; /* A different font */
+    padding: 5px 10px;
+    border: 1px solid #007bff; /* Clearly defined button look */
+    border-radius: 5px;
+    transition: background-color 0.2s;
 }
 
-/* Navigation */
+#logout-link:hover,
+#my-account-link:hover {
+    background-color: #007bff;
+    color: #fff; /* White text on hover */
+    text-decoration: none;
+}
+/* * *** END FIX *** */
+
+
+/* Navigation (The classification bar below the white header) */
+/* The next element after <header> is likely the main classification navigation */
+.classification-nav-wrapper {
+    background-color: #333; /* The black background you see */
+}
+
+/* You might need to adjust the selector below if your main nav is not a direct child of #wrapper or a wrapper with a specific class */
 nav ul {
     list-style: none;
     padding: 0;
     margin: 0;
     display: flex;
     justify-content: space-around;
-    background-color: #333;
+    background-color: #333; /* Should target the black bar */
 }
 
 nav a {
@@ -171,11 +219,6 @@ main {
     transform: scale(1.05);
 }
 
-.upgrade-image-container img {
-    width: 100%;
-    height: auto;
-}
-
 .upgrade-item a {
     text-decoration: none;
     color: #007bff;
@@ -238,49 +281,49 @@ footer {
 }
 /* New styles for the vehicle detail view */
 #inv-detail-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2rem;
-  padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    padding: 1rem;
 }
 
 #inv-detail-wrapper img {
-  max-width: 100%;
-  height: auto;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 #inv-detail-wrapper .content-container ul {
-  list-style: none;
-  padding: 0;
+    list-style: none;
+    padding: 0;
 }
 
 #inv-detail-wrapper .content-container li {
-  margin-bottom: 0.5rem;
-  line-height: 1.5;
+    margin-bottom: 0.5rem;
+    line-height: 1.5;
 }
 
 .detail-label {
-  font-weight: bold;
+    font-weight: bold;
 }
 
 /* For large screens, use a side-by-side layout */
 @media (min-width: 768px) {
-  #inv-detail-wrapper {
-    flex-direction: row;
-    align-items: flex-start;
-    justify-content: center;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
+    #inv-detail-wrapper {
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: center;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
 
-  .image-container,
-  .content-container {
-    flex: 1;
-    padding: 0 1rem;
-  }
+    .image-container,
+    .content-container {
+        flex: 1;
+        padding: 0 1rem;
+    }
 }
 /* End of new styles for the vehicle detail view */
 
@@ -356,3 +399,4 @@ footer {
         font-size: 3rem;
         letter-spacing: 1px;
     }
+

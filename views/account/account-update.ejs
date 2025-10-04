@@ -1,0 +1,101 @@
+<div class="account-form-container">
+    <h1 class="page-heading">
+        <%= locals.title %>
+    </h1>
+
+    <!-- Message Processing Block: Safely extract all flash messages -->
+    <%
+    let allMessages = [];
+    if (typeof messages === 'object' && messages !== null) {
+        Object.keys(messages).forEach(key => {
+            if (Array.isArray(messages[key])) {
+                allMessages = allMessages.concat(messages[key]);
+            }
+        });
+    }
+    %>
+
+    <!-- Display Flash Messages (Success and regular messages use 'notice' class) -->
+    <% if (allMessages.length > 0) { %>
+        <!-- Using success-notice for general messages as well for cleaner display -->
+        <ul class="notice success-notice" role="alert">
+            <% allMessages.forEach(message => { %>
+                <li><%= message %></li>
+            <% }); %>
+        </ul>
+    <% } %>
+
+    <!-- Display Validation Errors -->
+    <% if (errors && errors.length > 0) { %>
+        <ul class="notice error-notice" role="alert">
+        <% errors.forEach(error => { %>
+            <li><%= error.msg %></li>
+        <% }); %>
+        </ul>
+    <% } %>
+
+    <!-- ============================================= -->
+    <!-- 1. ACCOUNT DETAILS UPDATE FORM (Name and Email) -->
+    <!-- ============================================= -->
+    <div class="update-section">
+        <h2 class="page-heading" style="font-size: 1.5em; margin-bottom: 20px;">
+            Update Account Information
+        </h2>
+        
+        <form id="accountUpdateForm" action="/account/update" method="post">
+            
+            <!-- First Name -->
+            <label for="account_firstname">First Name:</label>
+            <input type="text" id="account_firstname" name="account_firstname" required value="<%= typeof sticky != 'undefined' ? sticky.account_firstname : accountData.account_firstname %>">
+
+            <!-- Last Name -->
+            <label for="account_lastname">Last Name:</label>
+            <input type="text" id="account_lastname" name="account_lastname" required value="<%= typeof sticky != 'undefined' ? sticky.account_lastname : accountData.account_lastname %>">
+
+            <!-- Email -->
+            <label for="account_email">Email:</label>
+            <input type="email" id="account_email" name="account_email" required value="<%= typeof sticky != 'undefined' ? sticky.account_email : accountData.account_email %>">
+
+            <!-- Hidden Input for Account ID -->
+            <input type="hidden" name="account_id" value="<%= accountData.account_id %>">
+            
+            <button type="submit" class="button">Update Account</button>
+        </form>
+    </div>
+
+
+    <!-- ============================================= -->
+    <!-- 2. CHANGE PASSWORD FORM -->
+    <!-- ============================================= -->
+    <div class="update-section">
+        <h2 class="page-heading" style="font-size: 1.5em; margin-bottom: 10px;">
+            Change Password
+        </h2>
+        <p>Passwords must be a minimum of 12 characters and contain at least 1 capital letter, 1 number, and 1 special character.</p>
+
+        <form id="passwordUpdateForm" action="/account/change-password" method="post">
+            
+            <!-- New Password Input -->
+            <label for="account_password">New Password:</label>
+            <input type="password" 
+                   id="account_password" 
+                   name="account_password" 
+                   required 
+                   pattern="^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[^A-Za-z0-9\s]).{12,}$"
+                   title="Password must be at least 12 characters and contain at least 1 capital letter, 1 number, and 1 special character."
+                   placeholder="Enter new password">
+            <span class="password-requirements">Password must meet all requirements.</span>
+
+            <!-- Hidden Input for Account ID -->
+            <input type="hidden" name="account_id" value="<%= accountData.account_id %>">
+
+            <button type="submit" class="button">Change Password</button>
+        </form>
+    </div>
+
+</div>
+
+
+
+
+

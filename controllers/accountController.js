@@ -42,10 +42,8 @@ async function registerAccount(req, res, next) {
     // Hash the password before storing
     let hashedPassword
     try {
-        // User's superior asynchronous hashing function (No change needed here)
         hashedPassword = await bcrypt.hash(account_password, 10)
     } catch (error) {
-        // IMPROVEMENT HERE: Ensuring form data is passed back to keep fields sticky on a hashing error
         req.flash("notice", 'Sorry, there was a processing error during registration.')
         res.status(500).render("account/registration", {
             title: "Registration",
@@ -63,17 +61,15 @@ async function registerAccount(req, res, next) {
         account_firstname,
         account_lastname,
         account_email,
-        hashedPassword // Correctly passes the hashed password
+        hashedPassword
     )
 
     if (regResult) {
         req.flash(
             "notice",
-            // The flash message will now be displayed when the user is redirected to /account/login
             `Congratulations, you\'re registered ${account_firstname}. Please log in.`
         )
-        // FIX: Changed res.render() to res.redirect() to trigger the PRG pattern
-        res.status(201).redirect("/account/login") 
+        res.status(201).redirect("/account/login")
     } else {
         req.flash("notice", "Sorry, the registration failed.")
         res.status(501).render("account/registration", {
@@ -109,7 +105,6 @@ async function accountLogin(req, res) {
             } else {
                 res.cookie("jwt", accessToken, { httpOnly: true, secure: true, maxAge: 3600 * 1000 })
             }
-            // Successful login redirects to the account management route
             return res.redirect("/account/")
         }
         else {
@@ -128,7 +123,6 @@ async function accountLogin(req, res) {
 
 /* ****************************************
 * Deliver account management view
-* This is the new function to deliver the post-login landing page.
 * *************************************** */
 async function buildAccountManagement(req, res, next) {
     let nav = await utilities.getNav()
@@ -136,10 +130,135 @@ async function buildAccountManagement(req, res, next) {
     res.render("account/account-management", {
         title: pageTitle,
         nav,
-        errors: null, // Pass null for no express-validator errors
+        errors: null,
     })
 }
 
+// ----------------------------------------------------
+// FUNCTIONS FOR ACCOUNT UPDATE (TASK 5)
+// ----------------------------------------------------
 
-// All functions are now correctly defined and exported.
-module.exports = { buildLogin, buildRegistration, registerAccount, accountLogin, buildAccountManagement }
+/* ****************************************
+* Deliver Account Update view
+* *************************************** */
+async function buildUpdateView(req, res, next) {
+    let nav = await utilities.getNav()
+    const title = "Account Update"
+    
+    // accountData is already available via res.locals from checkJWTToken middleware
+    res.render("account/account-update", {
+        title: title,
+        nav,
+        errors: null,
+        // The view will use res.locals.accountData to pre-populate fields
+    })
+}
+
+/* ****************************************
+* Process Account Information Update
+* *************************************** */
+async function updateAccount(req, res, next) {
+    let nav = await utilities.getNav()
+    const { account_firstname, account_lastname, account_email, account_id } = req.body
+
+    const updateResult = await accountModel.updateAccount(
+        account_firstname,
+        account_lastname,
+        account_email,
+        account_id
+    )
+
+    if (updateResult) {
+        const updatedAccountData = await accountModel.getAccountById(account_id)
+        
+        req.flash("notice", `Your account information was successfully updated.`)
+        
+        // Check if email changed, if so, a new JWT is required for the user's session
+        if (account_email !== res.locals.accountData.account_email) {
+             // 1. Re-issue JWT with new data
+            delete updatedAccountData.account_password
+            const accessToken = jwt.sign(updatedAccountData, process.env.ACCESS_TOKEN_SECRET, { expiresIn: 3600 * 1000 })
+            
+            // 2. Set new cookie
+            if(process.env.NODE_ENV === 'development') {
+                res.cookie("jwt", accessToken, { httpOnly: true, maxAge: 3600 * 1000 })
+            } else {
+                res.cookie("jwt", accessToken, { httpOnly: true, secure: true, maxAge: 3600 * 1000 })
+            }
+            
+            // 3. Update res.locals for the immediate response (to show new greeting)
+            res.locals.accountData = updatedAccountData
+        }
+
+        res.redirect("/account/")
+
+    } else {
+        req.flash("notice", "Sorry, the update failed. Please try again.")
+        res.status(501).render("account/account-management", {
+            title: "Account Management",
+            nav,
+            errors: null,
+        })
+    }
+}
+
+/* ****************************************
+* Process Password Change
+* *************************************** */
+async function updatePassword(req, res, next) {
+    let nav = await utilities.getNav()
+    const { account_password, account_id } = req.body
+
+    // Hash the password
+    let hashedPassword
+    try {
+        hashedPassword = await bcrypt.hash(account_password, 10)
+    } catch (error) {
+        req.flash("notice", 'Sorry, there was a processing error during password change.')
+        // Redirect to management and rely on flash message
+        res.status(500).redirect("/account/")
+        return
+    }
+
+    const updateResult = await accountModel.updatePassword(
+        hashedPassword,
+        account_id
+    )
+
+    if (updateResult) {
+        req.flash("notice", `Your password was successfully updated.`)
+        res.redirect("/account/")
+    } else {
+        req.flash("notice", "Sorry, the password change failed. Please try again.")
+        res.status(501).redirect("/account/")
+    }
+}
+
+/* ****************************************
+* Process Logout Request (Task 6)
+* *************************************** */
+async function accountLogout(req, res) {
+    // 1. Clear the JWT cookie
+    res.clearCookie("jwt");
+    
+    // 2. Redirect the client to the home view
+    req.flash("notice", "You have been logged out.");
+    res.redirect("/");
+}
+
+
+// ----------------------------------------------------
+// EXPORTING ALL FUNCTIONS
+// ----------------------------------------------------
+
+module.exports = { 
+    buildLogin, 
+    buildRegistration, 
+    registerAccount, 
+    accountLogin, 
+    buildAccountManagement,
+    buildUpdateView,
+    updateAccount,
+    updatePassword,
+    accountLogout // New function exported
+}
