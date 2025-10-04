@@ -223,71 +223,134 @@ invCont.buildEditInventoryView = utilities.handleErrors(async function (req, res
 })
 
 /* ***************************
- * Update Inventory Data
- * ************************** */
+ * Update Inventory Data
+ * ************************** */
 invCont.updateInventory = utilities.handleErrors(async function (req, res, next) {
-  let nav = await utilities.getNav()
-  const {
-    inv_id,
-    inv_make,
-    inv_model,
-    inv_description,
-    inv_image,
-    inv_thumbnail,
-    inv_price,
-    inv_year,
-    inv_miles,
-    inv_color,
-    classification_id,
-  } = req.body
+  let nav = await utilities.getNav()
+  const {
+    inv_id,
+    inv_make,
+    inv_model,
+    inv_description,
+    inv_image,
+    inv_thumbnail,
+    inv_price,
+    inv_year,
+    inv_miles,
+    inv_color,
+    classification_id,
+  } = req.body
 
-  // Parse inv_id to an integer, as database IDs are typically integers
-  const inv_id_int = parseInt(inv_id)
+  // Parse inv_id to an integer, as database IDs are typically integers
+  const inv_id_int = parseInt(inv_id)
 
-  // Call the model function with the correct parameter order (matching the model's SQL $1 to $11)
-  const updateResult = await invModel.updateInventory(
-    inv_make,
-    inv_model,
-    inv_year,
-    inv_description,
-    inv_image,
-    inv_thumbnail,
-    inv_price,
-    inv_miles,
-    inv_color,
-    classification_id,
-    inv_id_int
-  )
+  // Call the model function with the correct parameter order (matching the model's SQL $1 to $11)
+  const updateResult = await invModel.updateInventory(
+    inv_make,
+    inv_model,
+    inv_year,
+    inv_description,
+    inv_image,
+    inv_thumbnail,
+    inv_price,
+    inv_miles,
+    inv_color,
+    classification_id,
+    inv_id_int
+  )
 
-  if (updateResult) {
-    // updateResult is the rowCount (1) on success. Use req.body to build the name.
-    const itemName = inv_make + " " + inv_model
-    req.flash("notice", `The ${itemName} was successfully updated.`)
-    res.redirect("/inv/")
-  } else {
-    // Failure to update in the database
-    const classificationSelect = await utilities.buildClassificationList(classification_id)
-    const itemName = `${inv_make} ${inv_model}`
-    req.flash("notice", "Sorry, the update failed.")
-    res.status(501).render("inventory/edit-inventory", {
-      title: "Edit " + itemName,
-      nav,
-      classificationSelect: classificationSelect,
-      errors: null,
-      inv_id, // Pass back the original ID for stickiness
-      inv_make,
-      inv_model,
-      inv_year,
-      inv_description,
-      inv_image,
-      inv_thumbnail,
-      inv_price,
-      inv_miles,
-      inv_color,
-      classification_id
-    })
-  }
+  if (updateResult) {
+    // updateResult is the rowCount (1) on success. Use req.body to build the name.
+    const itemName = inv_make + " " + inv_model
+    req.flash("notice", `The ${itemName} was successfully updated.`)
+    res.redirect("/inv/")
+  } else {
+    // Failure to update in the database
+    const classificationSelect = await utilities.buildClassificationList(classification_id)
+    const itemName = `${inv_make} ${inv_model}`
+    req.flash("notice", "Sorry, the update failed.")
+    res.status(501).render("inventory/edit-inventory", {
+      title: "Edit " + itemName,
+      nav,
+      classificationSelect: classificationSelect,
+      errors: null,
+      inv_id, // Pass back the original ID for stickiness
+      inv_make,
+      inv_model,
+      inv_year,
+      inv_description,
+      inv_image,
+      inv_thumbnail,
+      inv_price,
+      inv_miles,
+      inv_color,
+      classification_id
+    })
+  }
 })
 
-module.exports = invCont
+/* ***************************
+ * Build Delete Confirmation View
+ * ************************** */
+invCont.buildDeleteConfirmation = utilities.handleErrors(async function (req, res, next) {
+    const inv_id = parseInt(req.params.invId); 
+    let nav = await utilities.getNav();
+    const itemData = await invModel.getInventoryByInvId(inv_id); // Fetch item details
 
+    if (!itemData) {
+        req.flash("notice", "Sorry, the inventory item could not be found for deletion.");
+        return res.redirect("/inv/");
+    }
+
+    const itemName = `${itemData.inv_make} ${itemData.inv_model}`;
+    // Render the confirmation view, passing item data for display and form stickiness
+    res.render("./inventory/delete-confirm", { 
+        title: "Delete " + itemName,
+        nav,
+        errors: null,
+        inv_id: itemData.inv_id,
+        inv_make: itemData.inv_make,
+        inv_model: itemData.inv_model,
+        inv_year: itemData.inv_year,
+        inv_price: itemData.inv_price,
+    });
+});
+
+/* ***************************
+ * Delete Inventory Item
+ * ************************** */
+invCont.deleteInventoryItem = utilities.handleErrors(async function (req, res, next) {
+    // Get data from the hidden form fields
+    const { inv_id, inv_make, inv_model } = req.body;
+    const inv_id_int = parseInt(inv_id);
+
+    // Call the model function to delete the item
+    // NOTE: The deleteInventoryItem model function must be created next.
+    const deleteResult = await invModel.deleteInventoryItem(inv_id_int); 
+
+    if (deleteResult) {
+        const itemName = inv_make + " " + inv_model;
+        req.flash("notice", `The ${itemName} was successfully deleted.`);
+        res.redirect("/inv/"); // Redirect back to management view
+    } else {
+        // Deletion failed: Re-render the confirmation view with an error message
+        const nav = await utilities.getNav();
+        const itemName = `${inv_make} ${inv_model}`;
+        
+        req.flash("notice", "Sorry, the deletion failed.");
+        
+        // Pass necessary data back for display
+        res.status(501).render("inventory/delete-confirm", {
+            title: "Delete " + itemName,
+            nav,
+            errors: null,
+            inv_id,
+            inv_make,
+            inv_model,
+            inv_year: req.body.inv_year || null,
+            inv_price: req.body.inv_price || null,
+        });
+    }
+});
+
+module.exports = invCont

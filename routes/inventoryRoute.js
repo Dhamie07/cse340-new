@@ -61,11 +61,31 @@ router.get(
 // Route to process the Edit Inventory data (TASK 6 POST)
 // URL: /inv/update
 router.post(
-    "/update/", 
-    invValidate.inventoryRules(), // Runs the validation rules for all inventory fields
-    invValidate.checkUpdateData,  // Checks for errors, and if found, returns to the edit view with sticky data
-    utilities.handleErrors(invController.updateInventory) // Continues to the controller function if validation passes
+    "/update/", 
+    invValidate.inventoryRules(), // Runs the validation rules for all inventory fields
+    invValidate.checkUpdateData,  // Checks for errors, and if found, returns to the edit view with sticky data
+    utilities.handleErrors(invController.updateInventory) // Continues to the controller function if validation passes
 )
+
+// ******************************
+// Route: Delete Confirmation View (GET)
+// Path: /inv/delete/:invId
+// ******************************
+// This route delivers the view to confirm the deletion of an item.
+router.get(
+    "/delete/:invId",
+    utilities.handleErrors(invController.buildDeleteConfirmation) // Controller function to be built later
+);
+
+// ******************************
+// Route: Handle Delete Process (POST)
+// Path: /inv/delete/:invId
+// ******************************
+// This route handles the submission and calls the controller function to delete the item.
+router.post(
+    "/delete/:invId",
+    utilities.handleErrors(invController.deleteInventoryItem) // Controller function to be built later
+);
 
 // Existing routes:
 // Route to build inventory by classification view

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= title %> | CSE Motors</title>
+    <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="/css/inventory.css" />
+  </head>
+  <body>
+    <main>
+      <div class="content-container form-container">
+        <h1><%= title %></h1>
+        <p>Confirm Deletion - The delete is **permanent**.</p>
+
+        <%- messages() %>
+
+        <% if (errors && errors.array) { %>
+          <ul class="notice">
+            <% errors.array().forEach(error => { %>
+              <li><%= error.msg %></li>
+            <% }) %>
+          </ul>
+        <% } %>
+
+        <form action="/inv/delete/<%= inv_id %>" method="post" id="deleteForm">
+          
+          <label for="invMake">Make</label>
+          <input
+            type="text"
+            id="invMake"
+            name="inv_make"
+            readonly
+            value="<%= inv_make %>"
+          />
+
+          <label for="invModel">Model</label>
+          <input
+            type="text"
+            id="invModel"
+            name="inv_model"
+            readonly
+            value="<%= inv_model %>"
+          />
+
+          <label for="invYear">Year</label>
+          <input
+            type="number"
+            id="invYear"
+            name="inv_year"
+            readonly
+            value="<%= inv_year %>"
+          />
+
+          <label for="invPrice">Price ($)</label>
+          <input
+            type="text"
+            id="invPrice"
+            name="inv_price"
+            readonly
+            value="<%= inv_price %>"
+          />
+
+          <%# Hidden inputs required for the delete POST request and failure message %>
+          <input type="hidden" name="inv_id" value="<%= inv_id %>" />
+          <input type="hidden" name="inv_make" value="<%= inv_make %>" />
+          <input type="hidden" name="inv_model" value="<%= inv_model %>" />
+
+
+          <button type="submit" class="submit-button delete-button">Delete Vehicle</button>
+        </form>
+      </div>
+    </main>
+  </body>
+</html>
