@@ -16,43 +16,47 @@ router.get('/', utilities.checkLogin, utilities.handleErrors(accountController.b
 
 // GET route to deliver the Account Update View ✨ NEW ROUTE (Task 5) ✨
 router.get(
-    '/update/:account_id', 
-    utilities.checkLogin, 
-    utilities.handleErrors(accountController.buildUpdateView)
+    '/update/:account_id', 
+    utilities.checkLogin, 
+    utilities.handleErrors(accountController.buildUpdateView)
 );
+
+// GET route to log out the user (existing)
+// FIX: Added the missing leading slash (/) to correctly match the path /account/logout
+router.get('/logout', utilities.handleErrors(accountController.accountLogout));
 
 // Process the registration data (existing)
 router.post(
-    "/register",
-    accountValidate.registationRules(),
-    accountValidate.checkRegData,
-    utilities.handleErrors(accountController.registerAccount)
+    "/register",
+    accountValidate.registationRules(),
+    accountValidate.checkRegData,
+    utilities.handleErrors(accountController.registerAccount)
 );
 
 // Process the login attempt (existing)
 router.post(
-    "/login",
-    accountValidate.loginRules(),
-    accountValidate.checkLoginData,
-    utilities.handleErrors(accountController.accountLogin)
+    "/login",
+    accountValidate.loginRules(),
+    accountValidate.checkLoginData,
+    utilities.handleErrors(accountController.accountLogin)
 );
 
 // Process the Account Information Update ✨ NEW ROUTE (Task 5) ✨
 router.post(
-    "/update",
-    utilities.checkLogin,
-    accountValidate.updateAccountRules(),
-    accountValidate.checkAccountUpdateData,
-    utilities.handleErrors(accountController.updateAccount)
+    "/update",
+    utilities.checkLogin,
+    accountValidate.updateAccountRules(),
+    accountValidate.checkAccountUpdateData,
+    utilities.handleErrors(accountController.updateAccount)
 );
 
 // Process the Password Change Request ✨ NEW ROUTE (Task 5) ✨
 router.post(
-    "/change-password",
-    utilities.checkLogin,
-    accountValidate.changePasswordRules(),
-    accountValidate.checkPasswordData,
-    utilities.handleErrors(accountController.updatePassword)
+    "/change-password",
+    utilities.checkLogin,
+    accountValidate.changePasswordRules(),
+    accountValidate.checkPasswordData,
+    utilities.handleErrors(accountController.updatePassword)
 );
 
 module.exports = router;
