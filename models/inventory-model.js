@@ -148,6 +148,34 @@ async function deleteInventoryItem(inv_id) {
   }
 }
 
+/* ***************************************
+ * Get Inventory Items based on Search Query (NEW FUNCTION)
+ * *************************************** */
+async function searchInventory(search_term) {
+  try {
+    const sql = `
+      SELECT 
+        inv_id, inv_make, inv_model, inv_year, inv_price, inv_thumbnail, classification_name
+      FROM 
+        inventory i
+      JOIN 
+        classification c ON i.classification_id = c.classification_id
+      WHERE 
+        inv_make ILIKE $1 OR 
+        inv_model ILIKE $1 OR 
+        inv_description ILIKE $1 OR
+        classification_name ILIKE $1
+    `
+    // Use the % wildcard for partial matching
+    const searchParam = `%${search_term}%` 
+    const data = await pool.query(sql, [searchParam])
+    return data.rows
+  } catch (error) {
+    console.error("searchInventory error: " + error)
+    // Throw an error to be caught by the controller's handleErrors utility
+    throw new Error("Could not perform inventory search.")
+  }
+}
 
 module.exports = {
   getClassifications,
@@ -156,5 +184,6 @@ module.exports = {
   createClassification,
   addInventory,
   updateInventory,
-  deleteInventoryItem // <-- Now exporting the delete function
+  deleteInventoryItem, 
+  searchInventory // <--- EXPORT THE NEW FUNCTION
 };

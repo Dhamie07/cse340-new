@@ -2,8 +2,8 @@
     <a href="/" title="Home Page" id="logo-link">
         <picture>
             <!-- Assuming a logo image is used -->
-            <source media="(min-width: 600px)" srcset="/images/site/logo.png">
-            <img src="/images/site/logo-small.png" alt="CSE Motors Logo">
+            <source media="(min-width: 600px)" srcset="/images/cse-logo.png">
+            <img src="/images/cse-logo.png" alt="CSE Motors Logo">
         </picture>
     </a>
     
@@ -16,6 +16,18 @@
         <% } %>
 
         <div id="account-links">
+            <!-- NEW: Inventory Search Form -->
+            <form action="/search/results" method="GET" class="main-search-form">
+                <input 
+                    type="search" 
+                    name="search_term" 
+                    placeholder="Search Inventory..." 
+                    required 
+                    aria-label="Search Inventory"
+                />
+                <button type="submit">Search</button>
+            </form>
+            
             <!-- Task 1: "My Account" link (Login/Register) - hidden when logged in -->
             <% if (!locals.loggedin) { %>
                 <a href="/account/login" title="Click to log in or register" id="my-account-link">
@@ -32,4 +44,5 @@
         </div>
     </nav>
 </header>
+
 
